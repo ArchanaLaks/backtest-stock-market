@@ -1,18 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { MatDialog } from '@angular/material/dialog';
+import { LegBuilderComponent } from '../leg-builder/leg-builder.component';
+import { HttpClient } from '@angular/common/http';
 
+declare var TradingView: any;
 @Component({
   selector: 'app-trading-statergy',
   templateUrl: './trading-statergy.component.html',
   styleUrls: ['./trading-statergy.component.css']
 })
 export class TradingStatergyComponent implements OnInit {
+  @ViewChild('pdfContent') pdfContent!: ElementRef;
   title = 'buying-strategy';
   showWarning = false;
   selectedOption: string | null = null;
   dontShowAgain = false;
   option:string = 'look'; 
-
+  strategyName: string | null = null;
   isAllLegs = true;
   isSLLegs = false;
   isCheckboxChecked = false;
@@ -23,7 +30,7 @@ export class TradingStatergyComponent implements OnInit {
   otmOptions: string[] = [];
   legs: any[] = []; // New array to store legs
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,private dialog: MatDialog,private http: HttpClient) {
     this.form = this.fb.group({
       underlying: ['cash'],
       squareOff: ['partial'],
@@ -85,6 +92,12 @@ export class TradingStatergyComponent implements OnInit {
       } else {
         this.form.get('reentryTime')?.disable();
       }
+    });
+
+    this.http.get('../../assets/data.json').subscribe((data: any) => {
+      this.backtestResults = data.backtestResults;
+      this.generateChartData();
+      this.initTradingViewChart();
     });
   }
 
@@ -201,5 +214,72 @@ export class TradingStatergyComponent implements OnInit {
 
   isLegSegmentsTypeSelected(leg: any, type: string): boolean {
     return leg.segmentsType === type;
+  }
+
+
+  //pdf
+
+  generatePDF() {
+    const pdfContent = this.pdfContent.nativeElement;
+
+    html2canvas(pdfContent).then(canvas => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgWidth = pdf.internal.pageSize.getWidth();
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      pdf.save('generated.pdf');
+    });
+  }
+
+  //save stratergy
+
+  openLegBuilder(existingName?: string) {
+    const dialogRef = this.dialog.open(LegBuilderComponent, {
+      width: '400px',
+      backdropClass: 'backdrop-class',
+      data: { strategyName: existingName }
+    });
+
+    dialogRef.afterClosed().subscribe((result: string | undefined) => {
+      if (result) {
+        this.strategyName = result;
+      }
+    });
+  }
+
+  //chart
+
+  backtestResults: any[] = [];
+  chartData: any[] = [];
+
+  generateChartData() {
+    this.chartData = this.backtestResults.map(result => ({
+      date: new Date(result.date),
+      profit: result.profit
+    }));
+  }
+  initTradingViewChart() {
+    new TradingView.widget({
+      "container_id": "chartContainer",
+      "width": 1000,
+      "height": 400,
+      "symbol": "AAPL",
+      "interval": "D",
+      "timezone": "Etc/UTC",
+      "theme": "light",
+      "style": "1",
+      "locale": "en",
+      "toolbar_bg": "#f1f3f6",
+      "enable_publishing": false,
+      "hide_top_toolbar": true,
+      "save_image": false,
+      "details": true,
+      "studies": [
+        "RSI@tv-basicstudies"
+      ],
+      "containerBackground": "#ffffff"
+    });
   }
 }

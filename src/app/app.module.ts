@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { TradingStatergyComponent } from './trading-statergy/trading-statergy.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LegBuilderComponent } from './leg-builder/leg-builder.component';
+import { MatDialogModule } from '@angular/material/dialog'
 
 @NgModule({
   declarations: [

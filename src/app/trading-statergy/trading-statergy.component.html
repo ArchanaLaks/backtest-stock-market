@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid" #pdfContent>
     <nav class="navbar ">
         <a class="navbar-brand" href="#"><b>Buying Statergy</b></a>
     </nav>
@@ -590,9 +590,13 @@
             </div>
         </div>
         <div class="tester-buttons">
-            <button class="btn btn-primary">PDF</button>
-            <button class="btn btn-primary">Save Strategy</button>
-            <button class="btn btn-success">Start Backtest</button>
+            <button class="btn btn-primary" (click)="generatePDF()">PDF</button>
+            <div *ngIf="strategyName; else defaultTemplate">
+                <h2>{{ strategyName }} <button (click)="openLegBuilder(strategyName)">Edit</button></h2>
+              </div>
+              <ng-template #defaultTemplate>
+                <button class="btn btn-primary" (click)="openLegBuilder()">Save Strategy</button>
+              </ng-template>            <button class="btn btn-success">Start Backtest</button>
             <button class="btn btn-primary">Compare Backtest</button>
         </div>
     </form>
@@ -609,6 +613,7 @@
 
           </div>
         </div>
-      </div>    
+      </div> 
+      <div id="chartContainer" style="height: 400px;"></div>      
 </div>
 

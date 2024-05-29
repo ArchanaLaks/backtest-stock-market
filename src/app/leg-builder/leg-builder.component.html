@@ -1,107 +1,17 @@
-<div class="row">
-  <div class="col ins1">
-    <h6>Leg Builder</h6>
-      <div class="row">
-        <div class="col" style="display: flex;gap:10px;margin: 5px;">
-          <div>Segments :</div>
-          <div style="display: flex;">
-            <button type="button" [ngClass]="{'active': isUnderlyingTypeSelected('futures')}" (click)="selectUnderlyingType('futures')"><span>Futures</span></button>
-            <button type="button" [ngClass]="{'active': isUnderlyingTypeSelected('options')}" (click)="selectUnderlyingType('options')"><span>Options</span></button>
-          </div>
-        </div>
-        <div class="col" style="display:flex;gap:10px;margin: 5px;">
-          <div>Total lot :</div>
-          <input type="number" class="col-3" style="height: 30px;">
-        </div>
-        <div class="col" style="display: flex;gap:10px;margin: 5px;">
-          <div>Position :</div>
-          <div>
-            <button type="button" [ngClass]="{'active': isPositionTypeSelected('buy')}" (click)="selectPositionType('buy')"><span>Buy</span></button>
-            <button type="button" [ngClass]="{'active': isPositionTypeSelected('sell')}" (click)="selectPositionType('sell')"><span>sell</span></button>
-          </div>
-        </div>
-        <div class="col" style="display: flex;gap:10px;margin: 5px;">
-          <div>Option type :</div>
-          <div>
-            <button type="button" [ngClass]="{'active': isSegmentsTypeSelected('call')}" (click)="selectSegmentsType('call')"><span>Call</span></button>
-            <button type="button" [ngClass]="{'active': isSegmentsTypeSelected('put')}" (click)="selectSegmentsType('put')"><span>Put</span></button>
-          </div>
-        </div>
-        <div class="col" style="display:flex;gap:10px;margin: 5px;">
-          <div>Expiry :</div>
-          <select name="" id="" style="height: 30px;">
-            <option value="">Weekly</option>
-            <option value="">Next Weekly</option>
-            <option value="">Monthly</option>
-          </select>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col" style="display: flex;gap:10px;margin: 5px;justify-content: center;">
-          <div>Select Strike Criteria :</div>
-          <select formControlName="strikeCriteria" name="strikeCriteria" id="strikeCriteria">
-            <option value="s">Strike Type</option>
-            <option value="closetPremium">Closet Premium</option>
-            <option value="premiumGE">Premium>=</option>
-            <option value="premiumLE">Premium<=</option>
-            <option value="premiumRange">Premium Range</option>
-            <option value="straddleWidth">Straddle Width</option>
-            <option value="percentATM">% of ATM</option>
-            <option value="syntheticFuture">Synthetic Future</option>
-            <option value="atmStraddlePremiumPercent">ATM Straddle Premium %</option>
-          </select>
-        </div>
-        <div class="col" *ngIf="selectedStrikeCriteria === '' || selectedStrikeCriteria === 'syntheticFuture'" style="display: flex;gap:10px;margin: 5px;">
-          <select name="" id="">
-            <option *ngFor="let option of itmOptions" [value]="option">{{ option }}</option>
-            <option value="">ATM</option>
-            <option *ngFor="let option of otmOptions" [value]="option">{{ option }}</option>
-          </select>
-        </div>
-        <div class="col" *ngIf="selectedStrikeCriteria === 'closetPremium' || selectedStrikeCriteria === 'premiumGE' || selectedStrikeCriteria === 'premiumLE'" style="display: flex;gap:10px;margin:5px;">
-          <div>Premium : </div>
-          <input type="number" formControlName="premium">
-        </div>
-        <div class="col" *ngIf="selectedStrikeCriteria === 'premiumRange'" style="display: flex;gap:10px;margin:5px;">
-          <div style="display: flex;gap:10px;">
-            <div>Lower : </div>
-            <input type="number" formControlName="lower">
-          </div>
-          <div style="display: flex;gap:10px;">
-            <div>Upper : </div>
-            <input type="number" formControlName="upper">
-          </div>
-        </div>
-        <div class="col" *ngIf="selectedStrikeCriteria === 'straddleWidth'" style="display: flex;gap:10px;margin:5px;">
-          <div>[ ATM Strike </div>
-          <select name="" id="">
-            <option value="">+</option>
-            <option value="">-</option>
-          </select>
-          <div> ( </div>
-          <input type="number" formControlName="atmStrike" class="col-2">
-          <div> x ATM Straddle Price )]</div>
-        </div>
-        <div class="col" *ngIf="selectedStrikeCriteria === 'percentATM'" style="display: flex;gap:10px;margin:5px;">
-          <div>ATM</div>
-          <select name="" id="">
-            <option value="">+</option>
-            <option value="">-</option>
-          </select>
-          <input type="number" formControlName="atmPercentage" class="col-2">
-          <div> % of ATM </div>
-        </div>
-        <div class="col" *ngIf="selectedStrikeCriteria === 'atmStraddlePremiumPercent'" style="display: flex;gap:10px;margin:5px;">
-          <input type="number" formControlName="atmStraddlePercentage" class="col-2">
-          <div>%</div>
-        </div>
-        <div class="row">
-          <div class="col" style="text-align: center;margin:10px;">
-            <button class="btn btn-primary" style="color:black">Add Leg</button>
-          </div>
-        </div>
-      </div>
+<div class="modal-backdrop" (click)="close()"></div>
+<div class="modal-content">
+  <div class="modal-header">
+    <h5>Save Strategy</h5>
+    <button class="close-button" (click)="close()">X</button>
   </div>
+  <form [formGroup]="strategyForm" (ngSubmit)="onSubmit()">
+    <div class="modal-body">
+      <label for="strategyName">Strategy Name:</label>
+      <input id="strategyName" formControlName="strategyName" type="text" />
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="close()">Cancel</button>
+      <button type="submit" class="btn btn-primary">Done</button>
+    </div>
+  </form>
 </div>
-
-
