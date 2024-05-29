@@ -1,0 +1,614 @@
+<div class="container-fluid">
+    <nav class="navbar ">
+        <a class="navbar-brand" href="#"><b>Buying Statergy</b></a>
+    </nav>
+    <hr style="padding-top:0px;margin-top: 0px;">
+    <div class="row body">
+        <form [formGroup]="form">
+            <div class="row ">
+                <div class="row">
+                    <div class="col ins1">
+                        <h6>Instrument Settings</h6>
+                        <div style="text-align: center;margin: 5px;">
+                            <label for="indexSelect">Index : </label>
+                            <select id="indexSelect" (change)="onIndexChange($event)" style="margin-left: 1%;" >
+                              <option value="nifty">Nifty</option>
+                              <option value="banknifty">Banknifty</option>
+                              <option value="finnifty">Finnifty</option>
+                              <option value="midcpnifty">Midcpnifty</option>
+                              <option value="sensex">Sensex</option>
+                              <option value="bankex">Bankex</option>
+                            </select>
+                        </div>
+                        <div style="display: flex;justify-content: center;">
+                            <div>Underlying from <span class="fa fa-info-circle" style="background-color: white;height: 6px;width: 6px;"></span> </div>
+                            <button type="button" [ngClass]="{'active': isSelected('underlying', 'cash')}" (click)="selectOption('underlying', 'cash')" style="margin-left: 15px;"><span>Cash</span></button>
+                            <button type="button" [ngClass]="{'active': isSelected('underlying', 'future')}" (click)="selectOption('underlying', 'future')"><span>Future</span></button>
+                        </div>
+                    </div>
+                    <div class="col ins1">
+                        <h6>Legwise Settings</h6>
+                        <div style="display: flex;gap:2%;margin: 5px;justify-content: center;">
+                        <div>Square Off <span class="fa fa-info-circle"></span> </div>
+                        <div>
+                            <button type="button" [ngClass]="{'active': isSelected('squareOff', 'partial')}" (click)="selectOption('squareOff', 'partial')" style="margin-left: 15px;"><span>Partial</span></button>
+                            <button type="button" [ngClass]="{'active': isSelected('squareOff', 'complete')}" (click)="selectOption('squareOff', 'complete')"><span>Complete</span></button>                                          </div>
+                        </div>
+                        <div style="display: flex; justify-content: center;">
+                        <input type="checkbox" (change)="onCheckboxChange($event)" > Trail SL to Break-even price  <span class="fa fa-info-circle" style="margin-top: 5px;"></span>
+                        <button type="button" [ngClass]="{'active': isSelected('legs', 'alllegs')}" (click)="selectOption('legs', 'alllegs')" [disabled]="!isCheckboxChecked" style="margin-left: 15px;"><span>All legs</span></button>
+                        <button type="button" [ngClass]="{'active': isSelected('legs', 'sllegs')}" (click)="selectOption('legs', 'sllegs')" [disabled]="!isCheckboxChecked"><span>SL legs</span></button>
+                                  </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col ins1">
+                        <h6>Entry Settings</h6>
+                        <div style="display: flex;justify-content: center;gap:20px;margin: 5px;">
+                            <div>Stratergy Type</div>
+                            <div>
+                                <button type="button" [ngClass]="{'active': isStrategySelected('intraday')}" (click)="selectStrategy('intraday')"><span>Intraday</span></button>
+                                <button type="button" [ngClass]="{'active': isStrategySelected('btst')}" (click)="selectStrategy('btst')"><span>BTST</span></button>
+                                <button type="button" [ngClass]="{'active': isStrategySelected('positional')}" (click)="selectStrategy('positional')"><span>Positional</span></button>
+                            </div>
+                        </div>
+                        <div *ngIf="isStrategySelected('btst')">
+                            <div style="display: flex;justify-content: center;gap:100px;margin: 5px;">
+                                <div style="display: flex;gap:20px;">
+                                    <div>Entry Time </div>
+                                    <input type="time" >
+                                </div>
+                                <div style="display: flex;gap:20px;">
+                                    <div>Exit Time </div>
+                                    <input type="time">
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="isStrategySelected('intraday')">
+                            <div style="display: flex;justify-content: center;gap:100px;margin: 5px;">
+                                <div style="display: flex;gap:20px;">
+                                    <div>Entry Time </div>
+                                    <input type="time" >
+                                </div>
+                                <div style="display: flex;gap:20px;">
+                                    <div>Exit Time </div>
+                                    <input type="time">
+                                </div>
+                            </div>    
+                            <div style="display: flex; gap:10px;justify-content: center;margin-top: 5%;">
+                                <div>No re-entry after</div>
+                                <label class="switch">
+                                    <input type="checkbox" formControlName="noReentry">>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            <div style="text-align: center;margin: 5px;">
+                                <input type="time"  formControlName="reentryTime" >
+                            </div>
+                        </div>
+                        <div *ngIf="isStrategySelected('positional')">
+                            <div style="display:flex;gap:50px;justify-content: center;margin-top: 20px;">
+                                <div>Positional expire on a </div>
+                                <div>
+                                    <select name="" id="">
+                                        <option value="">Weekly expiry</option>
+                                        <option value="">Monthly expiry</option>
+                                    </select>
+                                    <label for=""> basis</label>
+                                </div>
+                            </div>
+                            <div style="display: flex;justify-content: center;gap:200px;margin-top: 30px;">
+                                <div>
+                                    <div>Entry Time </div>
+                                    <input type="time" >   
+                                    <div style="margin-top: 20px;">Entry</div> 
+                                    <select name="" id="" class="col-5">
+                                        <option value="">0</option>
+                                        <option value="">1</option>
+                                        <option value="">2</option>
+                                        <option value="">3</option>
+                                        <option value="">4</option>
+                                    </select>     
+                                    <label for="">trading days <br> before expiry</label>                       
+                                </div>
+                                <div>
+                                    <div>Exit Time </div>
+                                    <input type="time" > 
+                                    <div style="margin-top: 20px;">Exit</div> 
+                                    <select name="" id="" class="col-5">
+                                        <option value="">0</option>
+                                        <option value="">1</option>
+                                        <option value="">2</option>
+                                        <option value="">3</option>
+                                        <option value="">4</option>
+                                    </select>     
+                                    <label for="">trading days <br> before expiry</label>                       
+       
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col ins1">
+                    <h6 style="display: flex; justify-content: space-between;">
+                        Leg Builder
+                        <button type="button" (click)="toggleContent()" style="background: none; border: none; cursor: pointer;">
+                          <span *ngIf="isContentVisible">-</span>
+                          <span *ngIf="!isContentVisible">+</span>
+                        </button>
+                      </h6>                    
+                      <div *ngIf="isContentVisible">
+                      <div class="row">
+                      <div class="col" style="display: flex;gap:10px;margin: 5px;">
+                        <div>Segments :</div>
+                        <div style="display: flex;">
+                          <button type="button" [ngClass]="{'active': isUnderlyingTypeSelected('futures')}" (click)="selectUnderlyingType('futures')"><span>Futures</span></button>
+                          <button type="button" [ngClass]="{'active': isUnderlyingTypeSelected('options')}" (click)="selectUnderlyingType('options')"><span>Options</span></button>
+                        </div>
+                      </div>
+                      <div class="col" style="display:flex;gap:10px;margin: 5px;">
+                        <div>Total lot :</div>
+                        <input type="number" class="col-3" style="height: 30px;">
+                      </div>
+                      <div class="col" style="display: flex;gap:10px;margin: 5px;">
+                        <div>Position :</div>
+                        <div>
+                          <button type="button" [ngClass]="{'active': isPositionTypeSelected('buy')}" (click)="selectPositionType('buy')"><span>Buy</span></button>
+                          <button type="button" [ngClass]="{'active': isPositionTypeSelected('sell')}" (click)="selectPositionType('sell')"><span>sell</span></button>
+                        </div>
+                      </div>
+                      <div class="col" style="display: flex;gap:10px;margin: 5px;">
+                        <div>Option type :</div>
+                        <div>
+                          <button type="button" [ngClass]="{'active': isSegmentsTypeSelected('call')}" (click)="selectSegmentsType('call')"><span>Call</span></button>
+                          <button type="button" [ngClass]="{'active': isSegmentsTypeSelected('put')}" (click)="selectSegmentsType('put')"><span>Put</span></button>
+                        </div>
+                      </div>
+                      <div class="col" style="display:flex;gap:10px;margin: 5px;">
+                        <div>Expiry :</div>
+                        <select name="" id="" style="height: 30px;">
+                          <option value="">Weekly</option>
+                          <option value="">Next Weekly</option>
+                          <option value="">Monthly</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col" style="display: flex;gap:10px;margin: 5px;justify-content: center;">
+                        <div>Select Strike Criteria :</div>
+                        <select formControlName="strikeCriteria" name="strikeCriteria" id="strikeCriteria">
+                          <option value="strikeType">Strike Type</option>
+                          <option value="closetPremium">Closet Premium</option>
+                          <option value="premiumGE">Premium>=</option>
+                          <option value="premiumLE">Premium<=</option>
+                          <option value="premiumRange">Premium Range</option>
+                          <option value="straddleWidth">Straddle Width</option>
+                          <option value="percentATM">% of ATM</option>
+                          <option value="syntheticFuture">Synthetic Future</option>
+                          <option value="atmStraddlePremiumPercent">ATM Straddle Premium %</option>
+                        </select>
+                      </div>
+                      <div class="col" *ngIf="selectedStrikeCriteria === 'strikeType' || selectedStrikeCriteria === 'syntheticFuture'" style="display: flex;gap:10px;margin: 5px;">
+                        <select name="" id="">
+                          <option *ngFor="let option of itmOptions" [value]="option">{{ option }}</option>
+                          <option value="">ATM</option>
+                          <option *ngFor="let option of otmOptions" [value]="option">{{ option }}</option>
+                        </select>
+                      </div>
+                      <div class="col" *ngIf="selectedStrikeCriteria === 'closetPremium' || selectedStrikeCriteria === 'premiumGE' || selectedStrikeCriteria === 'premiumLE'" style="display: flex;gap:10px;margin:5px;">
+                        <div>Premium : </div>
+                        <input type="number" formControlName="premium">
+                      </div>
+                      <div class="col" *ngIf="selectedStrikeCriteria === 'premiumRange'" style="display: flex;gap:10px;margin:5px;">
+                        <div style="display: flex;gap:10px;">
+                          <div>Lower : </div>
+                          <input type="number" formControlName="lower">
+                        </div>
+                        <div style="display: flex;gap:10px;">
+                          <div>Upper : </div>
+                          <input type="number" formControlName="upper">
+                        </div>
+                      </div>
+                      <div class="col" *ngIf="selectedStrikeCriteria === 'straddleWidth'" style="display: flex;gap:10px;margin:5px;">
+                        <div>[ ATM Strike </div>
+                        <select name="" id="">
+                          <option value="">+</option>
+                          <option value="">-</option>
+                        </select>
+                        <div> ( </div>
+                        <input type="number" formControlName="atmStrike" class="col-2">
+                        <div> x ATM Straddle Price )]</div>
+                      </div>
+                      <div class="col" *ngIf="selectedStrikeCriteria === 'percentATM'" style="display: flex;gap:10px;margin:5px;">
+                        <div>ATM</div>
+                        <select name="" id="">
+                          <option value="">+</option>
+                          <option value="">-</option>
+                        </select>
+                        <input type="number" formControlName="atmPercentage" class="col-2">
+                        <div> % of ATM </div>
+                      </div>
+                      <div class="col" *ngIf="selectedStrikeCriteria === 'atmStraddlePremiumPercent'" style="display: flex;gap:10px;margin:5px;">
+                        <input type="number" formControlName="atmStraddlePercentage" class="col-2">
+                        <div>%</div>
+                      </div>
+                      <div class="row">
+                        <div class="col" style="text-align: center;margin:10px;">
+                            <button class="btn btn-primary" type="button" (click)="addLeg()" style="color: black;">Add Leg</button>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div *ngFor="let leg of legs; let i = index" class="row" style="margin-top: 10px; padding: 10px; border: 1px solid #ccc;">
+                <div class="row ins1">
+                  <h6>#{{ i + 1 }}</h6>
+                  <div style="display: flex; gap:20px;justify-content: center;">
+                    <div class="col">
+                        <div>Lots:</div>
+                        <input type="number" [value]="leg.totalLot" class="col-3">
+                    </div>
+                    <div class="col">
+                        <div>Position:</div>
+                        <button type="button" [ngClass]="{'active': isLegPositionTypeSelected(leg, 'buy')}" (click)="selectPositionType('buy')"><span>Buy</span></button>
+                        <button type="button" [ngClass]="{'active': isLegPositionTypeSelected(leg, 'sell')}" (click)="selectPositionType('sell')"><span>Sell</span></button>                            
+                    </div>
+                    <div class="col">
+                        <div>Option Type:</div>
+                        <button type="button" [ngClass]="{'active': isLegSegmentsTypeSelected(leg, 'call')}" (click)="selectSegmentsType('call')"><span>Call</span></button>
+                        <button type="button" [ngClass]="{'active': isLegSegmentsTypeSelected(leg, 'put')}" (click)="selectSegmentsType('put')"><span>Put</span></button>
+                    </div>
+                    <div class="col">
+                      <div>Expiry:</div>
+                      <select name="" id="" [value]="leg.expiry">
+                        <option value="">Weekly</option>
+                        <option value="">Next Weekly</option>
+                        <option value="">Monthly</option>  
+                      </select>
+                    </div>
+                    <div class="col">
+                        <div>Strike Criteria:</div>
+                        <select name="strikeCriteria" id="strikeCriteria" [value]="leg.strikeCriteria">
+                          <option value="strikeType">Strike Type</option>
+                          <option value="closetPremium">Closet Premium</option>
+                          <option value="premiumGE">Premium>=</option>
+                          <option value="premiumLE">Premium<=</option>
+                          <option value="premiumRange">Premium Range</option>
+                          <option value="straddleWidth">Straddle Width</option>
+                          <option value="percentATM">% of ATM</option>
+                          <option value="syntheticFuture">Synthetic Future</option>
+                          <option value="atmStraddlePremiumPercent">ATM Straddle Premium %</option>
+                        </select>
+                    </div> 
+                </div>                    
+                     <!-- Add more details as needed -->
+                     <div class="col">
+                        <div>
+                            <div  style="display: flex;gap:10px;margin: 5px;">
+                            <div>target profit </div>
+                            <label class="switch">
+                                <input type="checkbox" formControlName="targetProfit.enable">
+                                <span class="slider round"></span>
+                            </label>
+                            </div>
+                            <div  style="display: flex;gap:10px;">
+                            <select name="" id="" [disabled]="!form.get('targetProfit.enable')?.value">
+                                <option value="">Points(Pts)</option>
+                                <option value="">Underlying Pts </option>
+                                <option value="">Percent(%)</option>
+                                <option value="">Underlying %</option>
+                            </select>
+                            <input type="number" name="" id="" value="0" [disabled]="!form.get('targetProfit.enable')?.value">
+                            </div>
+                        </div>
+                </div>
+                <div class="col">
+                    <div>
+                        <div style="display: flex; gap:10px; margin: 5px;">
+                        <div>Stop Loss </div>
+                        <label class="switch">
+                            <input type="checkbox" formControlName="noReentry">>
+                            <span class="slider round"></span>
+                        </label>
+                        </div>
+                        <div style="display: flex; gap:10px;margin: 5px;">
+                        <select name="" id="">
+                            <option value="">Points(Pts)</option>
+                            <option value="">Underlying Pts </option>
+                            <option value="">Percent(%)</option>
+                            <option value="">Underlying %</option>
+                        </select>
+                        <input type="number" name="" id="" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div>
+                        <div style="display: flex; gap:10px;margin: 5px;">
+                        <div>Trail SL  </div>
+                        <label class="switch">
+                            <input type="checkbox" formControlName="noReentry">>
+                            <span class="slider round"></span>
+                        </label>
+                        </div>
+                        <div style="display: flex; gap:10px;margin: 5px;">
+                        <select name="" id="">
+                            <option value="">Points(Pts)</option>
+                            <option value="">Underlying Pts </option>
+                            <option value="">Percent(%)</option>
+                            <option value="">Underlying %</option>
+                        </select>
+                        <input type="number" name="" id="" value="0">
+                        <input type="number" name="" id="" value="0">
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div>
+                        <div style="display: flex; gap:10px;margin: 5px;">
+                        <div>Re-entry on Tgt  </div>
+                        <label class="switch">
+                            <input type="checkbox" formControlName="noReentry">>
+                            <span class="slider round"></span>
+                        </label>
+                        </div>
+                        <div style="display: flex; gap:10px;margin: 5px;">
+                        <select name="" id="">
+                            <option value="">Re ASAP</option>
+                            <option value="">RE ASAP </option>
+                            <option value="">RE MOMENTUM</option>
+                            <option value="">RE MOMENTUM</option>
+                            <option value="">RE COST</option>
+                            <option value="">RE COST</option>
+                            <option value="">Lasy leg</option>
+                        </select>
+                        <select name="" id="">
+                            <option value="">1</option>
+                            <option value="">2</option>
+                            <option value="">3</option>
+                            <option value="">4</option>
+                            <option value="">5</option>
+                            <option value="">6</option>
+                        </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div>
+                        <div style="display: flex; gap:10px;margin: 5px;">
+                        <div>Re-entry on SL  </div>
+                        <label class="switch">
+                            <input type="checkbox" formControlName="noReentry">>
+                            <span class="slider round"></span>
+                        </label>
+                        </div>
+                        <div style="display: flex;gap:10px;margin: 5px;">
+                        <select name="" id="">
+                            <option value="">Re ASAP</option>
+                            <option value="">RE ASAP </option>
+                            <option value="">RE MOMENTUM</option>
+                            <option value="">RE MOMENTUM</option>
+                            <option value="">RE COST</option>
+                            <option value="">RE COST</option>
+                            <option value="">Lasy leg</option>
+                        </select>
+                        <select name="" id="">
+                            <option value="">1</option>
+                            <option value="">2</option>
+                            <option value="">3</option>
+                            <option value="">4</option>
+                            <option value="">5</option>
+                            <option value="">6</option>
+                        </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div >
+                        <div style="display: flex; gap:10px;margin: 5px;">
+                        <div>Simple Momentum </div>
+                        <label class="switch">
+                            <input type="checkbox" formControlName="noReentry">>
+                            <span class="slider round"></span>
+                        </label>
+                        </div>
+                        <div style="display: flex; gap:10px;margin: 5px;">
+                        <select name="" id="">
+                            <option value="">Points (Pts)</option>
+                            <option value="">Points (Pts) </option>
+                            <option value="">Percent (%)</option>
+                            <option value="">Percent (%)</option>
+                            <option value="">Underlying Pts </option>
+                            <option value="">Underlying Pts</option>
+                            <option value="">Underlying %</option>
+                            <option value="">Underlying %</option>
+                        </select>
+                        <input type="number" name="" id="" value="0">
+                    </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div style="text-align: center;">
+                        <div style="display: flex; gap:10px;margin: 5px;">
+                        <div>Range Breakout</div>
+                        <label class="switch">
+                            <input type="checkbox" formControlName="noReentry">>
+                            <span class="slider round"></span>
+                        </label>
+                        </div>
+                        <div style="display: flex;gap:10px;margin: 5px;">
+                        <input type="time" name="" id="" value="09:45">
+                        <div>
+                            <button>High</button>
+                            <button>Low</button>
+                        </div>
+                        <select name="" id="">
+                            <option value="">Re ASAP</option>
+                            <option value="">RE ASAP </option>
+                            <option value="">RE MOMENTUM</option>
+                            <option value="">RE MOMENTUM</option>
+                            <option value="">RE COST</option>
+                            <option value="">RE COST</option>
+                            <option value="">Lasy leg</option>
+                        </select>
+                        </div>
+                </div>
+            
+                  </div>
+                </div>
+            </div>
+        <div class="row">
+            <h6>Overall Strategy settings</h6>
+            <div class="col ins1">
+                <div style="display: flex; gap:10px; margin: 5px;justify-content: center;">
+                    <div>Overall Stop Loss </div>
+                    <label class="switch">
+                        <input type="checkbox" formControlName="">>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div style="display: flex; gap:10px;margin: 5px;justify-content: center;">
+                    <select name="" id="">
+                        <option value="">Max Loss</option>
+                        <option value="">Total Premium % </option>
+                    </select>
+                    <input type="number" name="" id="" value="0" class="col-2">
+                </div>
+                <div style="display: flex; gap:10px; margin: 5px;justify-content: center;">
+                    <div>Overall Re-entry on SL</div>
+                    <label class="switch">
+                        <input type="checkbox" formControlName="noReentry">>
+                        <span class="slider round"></span>
+                    </label>
+                    </div>
+                    <div style="display: flex; gap:10px;margin: 5px;justify-content: center;">
+                    <select name="" id="">
+                        <option value="">RE ASAP</option>
+                        <option value="">RE ASAP</option>
+                        <option value="">RE MOMENTUM</option>
+                        <option value="">RE MOMENTUM</option>
+                    </select>
+                    <input type="number" name="" id="" value="1" class="col-2">
+                </div>
+            </div>
+            <div class="col ins1">
+                <div style="display: flex; gap:10px; margin: 5px;justify-content: center;">
+                    <div>Overall Target </div>
+                    <label class="switch">
+                        <input type="checkbox" formControlName="noReentry">>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div style="display: flex; gap:10px;margin: 5px;justify-content: center;">
+                    <select name="" id="">
+                        <option value="">Max Profit</option>
+                        <option value="">Total Premium % </option>
+                    </select>
+                    <input type="number" name="" id="" value="0" class="col-2" >
+                </div>
+                <div style="display: flex; gap:10px; margin: 5px;justify-content: center;">
+                    <div>Overall Re-entry on Tgt</div>
+                    <label class="switch">
+                        <input type="checkbox" formControlName="noReentry">>
+                        <span class="slider round"></span>
+                    </label>
+                    </div>
+                    <div style="display: flex; gap:10px;margin: 5px;justify-content: center;">
+                    <select name="" id="">
+                        <option value="">RE ASAP</option>
+                        <option value="">RE ASAP</option>
+                        <option value="">RE MOMENTUM</option>
+                        <option value="">RE MOMENTUM</option>
+                    </select>
+                    <input type="number" name="" id="" value="1" class="col-2">
+                </div>
+            </div>            
+            <div class="col ins1">
+                <div style="display: flex; gap:10px; margin: 5px;justify-content: center;">
+                    <div>Trailing Options </div>
+                    <label class="switch">
+                        <input type="checkbox" formControlName="noReentry">>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div style="display: flex; gap:10px;margin: 20px;justify-content: center;">
+                    <select formControlName="selectedOption">
+                        <option value="look">Look</option>
+                        <option value="lookAndTrail">Look and Trail</option>
+                        <option value="overallTrailSL">Overall Trail SL</option>
+                    </select>
+                </div>
+                <div *ngIf="selectedOption === 'look'">
+                <div style="display: flex; gap:10px; margin: 5px;justify-content: center;">
+                    <div>if profit reaches </div>
+                    <input type="number" formControlName="lookProfit" id="" value="0" class="col-2">
+                    <div>Lock profit</div>
+                    <input type="number" formControlName="lookLockProfit" id="" value="0" class="col-2">
+                </div>
+                </div>
+                <div *ngIf="selectedOption === 'lookAndTrail'">
+                    <div style="display: flex; gap:10px; margin: 5px;justify-content: center;">
+                        <div>if profit reaches </div>
+                        <input type="number" formControlName="lookTrailProfit" id="" value="0" class="col-2">
+                        <div>Lock profit</div>
+                        <input type="number" formControlName="lookTrailLockProfit" id="" value="0" class="col-2">
+                    </div>
+                    <div style="display: flex; gap:10px; margin: 5px;justify-content: center;">
+                        <div>for every increase in profit by </div>
+                        <input type="number" formControlName="lookTrailIncrease" id="" value="0" class="col-2">
+                        <div>Trail profit by</div>
+                        <input type="number" formControlName="lookTrailProfitBy" id="" value="0" class="col-2">
+                    </div>
+                </div>
+                <div *ngIf="selectedOption === 'overallTrailSL'">
+                    <div style="display: flex; gap:10px; margin: 5px;justify-content: center;">
+                        <select formControlName="overallTrailSLSelect" id="">
+                            <option value="MTM">MTM</option>
+                            <option value="Premium%">Premium %</option>
+                        </select>
+                        <input type="number" formControlName="overallTrailSLValue1" id="" value="0" class="col-2">
+                        <input type="number" formControlName="overallTrailSLValue2" id="" value="0" class="col-2">
+                    </div>
+                </div>    
+            </div>
+        </div>
+        <div class="row" style="margin-bottom: 5%;">
+            <div class="col ins1">
+                <h6>Date</h6>
+                <div style="display:flex;margin:5px;justify-content: space-between;">
+                    <div>Enter the duration of your backtest</div>
+                    <div style="display: flex;gap:20px;">
+                        <div>Start Date :</div>
+                        <input type="date">
+                        <div>End Date :</div>
+                        <input type="date">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tester-buttons">
+            <button class="btn btn-primary">PDF</button>
+            <button class="btn btn-primary">Save Strategy</button>
+            <button class="btn btn-success">Start Backtest</button>
+            <button class="btn btn-primary">Compare Backtest</button>
+        </div>
+    </form>
+    </div>
+    <div *ngIf="showWarning" class="modal">
+        <div class="modal-content">
+          <p *ngIf="selectedOption === 'midcpnifty'">MIDCPNIFTY is a new instrument with limited liquidity and depth. PLEASE BE CAREFUL BEFORE DEPLOYING YOUR STRATEGIES ON MIDCPNIFTY</p>
+          <p *ngIf="selectedOption === 'sensex'">SENSEX is a  new instrument with limited liquidity and depth. MAKE SURE TO EVALUATE RISK BEFORE TRADING ON SENSEX</p>
+          <p *ngIf="selectedOption === 'bankex'">BANKEX is a  new instrument with limited liquidity and depth. CONSIDER SECTORAL TRENDS BEFORE PLACING TRADES ON BANKEX</p>
+              <div>
+            <input type="checkbox" id="dontShowAgain" (change)="handleDontShowAgain($event)" [checked]="dontShowAgain">
+            <label for="dontShowAgain">Do not show again</label>
+            <span class="close" (click)="closeWarning()" ><button class="btn btn-danger">Close</button></span>
+
+          </div>
+        </div>
+      </div>    
+</div>
+

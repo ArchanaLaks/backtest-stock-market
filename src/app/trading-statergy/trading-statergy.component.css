@@ -1,0 +1,153 @@
+.body{
+    margin-top: 1%;
+}
+
+b{
+    
+    color:rgb(120, 190, 184);
+}
+button{
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgb(120, 190, 184);
+    background-color: transparent;
+    cursor: pointer;
+    transition: color 0.5s ease;
+}
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(120, 190, 184);
+    transition: left 0.5s ease; /* Transition for background color */
+    z-index: 0;
+}
+button.active::before {
+    left: 0; /* Slide in the background color */
+  }
+  button span {
+    position: relative;
+    z-index: 1; /* Ensure the text is above the background color */
+    transition: color 0.5s ease; /* Transition for text color */
+  }
+  button.active span {
+    color: white; /* Change text color for active button */
+  }
+  button[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  
+.btn-secondary{
+    height:30px;
+    text-align: center;
+}
+.ins1{
+    border:0.5px solid rgb(200, 200, 200);
+    margin-left: 1%;
+    margin-bottom: 1%;
+    padding: 1%;
+}
+
+.modal {
+    display: flex;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.4);
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background-color: #030303;
+    color:white;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+  }
+  
+  .close {
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+/* button toggler for re-entery */
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 24px;
+  }
+  
+  .switch input { 
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  input:checked + .slider:before {
+    transform: translateX(17px);
+  }
+  
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  .tester-buttons{
+    width: 98%;
+    background-color:rgb(120, 190, 184);
+    text-align: right;
+    position: fixed;
+    bottom: 0;
+  }
